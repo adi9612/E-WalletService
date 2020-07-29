@@ -1,0 +1,6 @@
+com\shashi\userservice\Controller\UserResource.class
+com\shashi\userservice\Repository\UserRepository.class
+com\shashi\userservice\GWalletApplication.class
+com\shashi\userservice\exception\UserNotFoundException.class
+com\shashi\userservice\Model\User.class
+com\shashi\userservice\exception\CustomGlobalExceptionHandler.class
