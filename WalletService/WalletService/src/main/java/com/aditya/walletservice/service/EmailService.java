@@ -2,6 +2,8 @@ package com.aditya.walletservice.service;
 import com.aditya.walletservice.Util.EmailUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -20,14 +22,13 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 
+@Service
 public class EmailService {
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
-    public static  final String FROM_EMAIL = "from@gmail.com"; //requires valid gmail id
-    public static final String PASSWORD = "yourGmailPassword"; // correct password for gmail id
+    public static  final String FROM_EMAIL = "singhaditya9612@gmail.com"; //requires valid gmail id
+    public static final String PASSWORD = "*******"; // correct password for gmail id
     public static void sendEmail(String toEmail)
     {
-        //final String toEmail = "umangd98@gmail.com"; // can be any email id
-
         Properties props = getProperties();
         Authenticator auth = getAuthenticator();
         Session session = Session.getDefaultInstance(props, auth);
@@ -35,10 +36,12 @@ public class EmailService {
         EmailUtil.sendEmail(session, toEmail,"Mail from e_wallet", "Transaction");
     }
 
-    public static void sendEmailWithAttachments(String host, String port,
-                                                final String userName, final String password, String toAddress,
-                                                String subject, String message, String attachFiles)
+    public static void sendEmailWithAttachments(String toAddress,String subject, String message, String attachFiles)
     {
+//        System.out.println(toAddress);
+        logger.info(toAddress);
+//        subject = getDefaultSubject();
+//        message = getDefaultMessage();
         if(Objects.isNull(subject))
         {
             subject = getDefaultSubject();
@@ -57,7 +60,7 @@ public class EmailService {
             // creates a new e-mail message
             Message msg = new MimeMessage(session);
 
-            msg.setFrom(new InternetAddress(userName));
+            msg.setFrom(new InternetAddress(FROM_EMAIL,false));
             InternetAddress[] toAddresses = {new InternetAddress(toAddress)};
             msg.setRecipients(Message.RecipientType.TO, toAddresses);
             msg.setSubject(subject);
@@ -91,6 +94,7 @@ public class EmailService {
             transport.connect("smtp.gmail.com", FROM_EMAIL, PASSWORD);
             transport.sendMessage(msg, msg.getAllRecipients());
             transport.close();
+//            Transport.send(msg);//only this also works
         }
         catch (Exception e)
         {
@@ -99,17 +103,22 @@ public class EmailService {
     }
     private static Properties getProperties()
     {
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.socketFactory.port", "465");
-        properties.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        return properties;
+        Properties props = new Properties();//props===properties
+//        properties.put("mail.smtp.host", "smtp.mail.com");
+//        props.put("mail.smtp.socketFactory.port", "587");
+//        props.put("mail.smtp.socketFactory.class",
+//                "javax.net.ssl.SSLSocketFactory");
+//        properties.put("mail.smtp.auth", "true");
+//        properties.put("mail.smtp.port", "587");
+//        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+//        properties.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        return props;
     }
-    private static Authenticator  getAuthenticator()
+    private static Authenticator getAuthenticator()
     {
         Authenticator auth = new Authenticator() {
             //override the getPasswordAuthentication method
