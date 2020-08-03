@@ -30,6 +30,9 @@ public class TransactionResource {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
+
     WalletValidator walletValidator = new WalletValidator();
     TransactionValidator validator = new TransactionValidator();
     private static final String TOPIC = "test";
@@ -74,12 +77,12 @@ public class TransactionResource {
     @GetMapping("/getBal/{id}")
     int getBal(@PathVariable int id) throws Exception {
 
-            Wallet wallet = walletRepository.findWalletByUserId(id);
+        Wallet wallet = walletRepository.findWalletByUserId(id);
 
-            if(wallet==null) throw new Exception("Wallet Not Found");
-            else {
-                return wallet.getBalance();
-            }
+        if(wallet==null) throw new Exception("Wallet Not Found");
+        else {
+            return wallet.getBalance();
+        }
     }
     @PostMapping("/addBalance")
     AddBalanceDetails addBalance(@RequestBody AddBalanceDetails request){
@@ -134,7 +137,7 @@ public class TransactionResource {
             fw.flush();
             fw.close();
             logger.info("CSV File is created successfully.");
-            EmailService.sendEmailWithAttachments("","",user1.getEmail(),"","to@gmail.com","","",filename);
+            emailService.sendEmailWithAttachments(user1.getEmail(),null,null,filename);
         } catch (Exception e) {
             e.printStackTrace();
         }
