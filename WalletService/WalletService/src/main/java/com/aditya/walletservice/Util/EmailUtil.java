@@ -28,9 +28,9 @@ public class EmailUtil {
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            msg.setFrom(new InternetAddress("umangd98@gmail.com", "NoReply-JD"));
+            msg.setFrom(new InternetAddress("@gmail.com", "NoReply-JD"));
 
-            msg.setReplyTo(InternetAddress.parse("umangd98@gmail.com", false));
+            msg.setReplyTo(InternetAddress.parse("@gmail.com", false));
 
             msg.setSubject(subject, "UTF-8");
 
